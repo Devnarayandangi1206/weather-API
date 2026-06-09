@@ -85,7 +85,6 @@
 </head>
 
 <body>
-
     <form id="form" name="form" onsubmit="return cityName()">
         <h1>!..Weather forecast..!</h1>
         <input type="text" placeholder="enter the city name" id="city" name="city">
@@ -105,12 +104,9 @@
         function cityName() {
             let city = document.forms['form']['city'].value;
             console.log(city)
-            //  User ne jo city name likha hai, usko get kar raha hai
 
-            //weather api ko call kr rha hai
             fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=dddeeb8ea156f28a1437a0af9ef33016`)
                 .then((res) => {
-                    //convert jason format me
                     return res.json();
                 })
                 .then((data) => {
@@ -119,16 +115,10 @@
                     data.list.map((value, i) => {
 
                         // console.log(value.main.temp)
-//Temperature ko Kelvin se Celsius mein convert kar raha hai
-               // let temp = parseInt(value.main.temp - 273.15);
-                
-                // Weather icon aur description display kar raha hai
-               // let image = "https://openweathermap.org/img/wn/" + value.weather[0].icon + ".png";
-                
+
                         let image = "https://openweathermap.org/img/wn/" + `${value.weather[0].icon}` + ".png";
                         let todayData = ` 
-                       
-                        <li>
+                            <li>
   <div id="tempstore" style="border: 1px solid black; text-align:center; background-image:url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJ8iGnrDcpWgWk-QuOYRhpqBWXhC-aWCq2yg&s'); background-repeat:no-repeat;background-size:cover; margin:20px; height:300px; width:300px;" >
         <div class="card shadow-0 border">
 <div class="card-body p-4">
