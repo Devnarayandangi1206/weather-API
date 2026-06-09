@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            background: linear-gradient(90deg, rgba(96, 96, 101, 1) 0%, rgba(16, 15, 15, 1) 50%, rgba(121, 121, 121, 1) 100%);
+
+        }
+
+        ul {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        ul li {
+            list-style-type: none;
+        }
+
+        #form {
+            /* position: fixed; */
+            border-radius: 20px;
+            border: 2px solid black;
+            padding: 5%;
+            /* background: linear-gradient(90deg, rgba(96,96,101,1) 0%, rgba(16,15,15,1) 50%, rgba(121,121,121,1) 100%); */
+            background-image: url("https://t4.ftcdn.net/jpg/06/28/52/09/360_F_628520967_SslB1PbLm3xb2lDIrV31w9zmPbyM19Qe.jpg");
+            /* background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRiMaMCXrJ-fUaZeK73MHdfe2H6AQEUDnAmDg&s"); */
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        input[type=text] {
+            padding: 1% 5% 1% 10%;
+            margin-left: 33%;
+            border: none;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bold;
+        }
+
+
+        input[type=text]:hover {
+            -ms-transform: scale(0.5);
+            -webkit-transform: scale(1.2);
+            transform: scale(1.2);
+            filter: drop-shadow(1px 1px 10px rgba(79, 195, 241, 0.774));
+        }
+
+        input[type=submit] {
+            padding: 0.5% 1% 0.5% 1%;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* input[type=submit]:hover {
+            -ms-transform: scale(0.5);
+            -webkit-transform: scale(1.2);
+            transform: scale(1.2);
+            filter: drop-shadow(1px 1px 10px rgba(79, 195, 241, 0.774));
+
+        } */
+
+        h1 {
+            text-align: center;
+            font-size: 50px;
+            /* margin-bottom: 5%; */
+            margin-top: -5%;
+            /* text-shadow: 1px 1px 10px red; */
+            font-weight: bold;
+            color: aqua;
+        }
+
+        #tempstore:hover {
+            -ms-transform: scale(0.5);
+            /* IE 9 */
+            -webkit-transform: scale(1.2);
+            /* Safari 3-8 */
+            transform: scale(1.2);
+            filter: drop-shadow(1px 1px 10px rgba(79, 195, 241, 0.774));
+
+        }
+    </style>
+</head>
+
+<body>
+
+    <form id="form" name="form" onsubmit="return cityName()">
+        <h1>!..Weather forecast..!</h1>
+        <input type="text" placeholder="enter the city name" id="city" name="city">
+        <input type="submit" value="Submit">
+
+    </form>
+    <br><br>
+    <div id="weatherData">
+
+    </div>
+    <ul id="ul-list">
+
+    </ul>
+
+    <script>
+
+        function cityName() {
+            let city = document.forms['form']['city'].value;
+            console.log(city)
+            //  User ne jo city name likha hai, usko get kar raha hai
+
+            //weather api ko call kr rha hai
+            fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=dddeeb8ea156f28a1437a0af9ef33016`)
+                .then((res) => {
+                    //convert jason format me
+                    return res.json();
+                })
+                .then((data) => {
+                    console.log(data);
+                    document.getElementById('ul-list').innerHTML = ''
+                    data.list.map((value, i) => {
+
+                        // console.log(value.main.temp)
+//Temperature ko Kelvin se Celsius mein convert kar raha hai
+               // let temp = parseInt(value.main.temp - 273.15);
+                
+                // Weather icon aur description display kar raha hai
+               // let image = "https://openweathermap.org/img/wn/" + value.weather[0].icon + ".png";
+                
+                        let image = "https://openweathermap.org/img/wn/" + `${value.weather[0].icon}` + ".png";
+                        let todayData = ` 
+                       
+                        <li>
+  <div id="tempstore" style="border: 1px solid black; text-align:center; background-image:url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJ8iGnrDcpWgWk-QuOYRhpqBWXhC-aWCq2yg&s'); background-repeat:no-repeat;background-size:cover; margin:20px; height:300px; width:300px;" >
+        <div class="card shadow-0 border">
+<div class="card-body p-4">
+
+  <h4 class="mb-1 sfw-normal">City Name: ${city}</h4>
+  <h5 class="mb-1 sfw-normal">Date: ${value.dt_txt}</h5>
+  <img src=${image} alt="icon">
+  <p class="mb-2">Current temperature: <strong>${parseInt(value.main.temp - 273.15)}°C</strong></p>
+  <p>Wind: <strong>${parseInt(value.wind.speed * 3.6)}km/h</strong></p>
+  <p>Max: <strong>${parseInt(value.main.temp_max - 273.15)}°C</strong>, Min: <strong>${parseInt(value.main.temp_min - 273.15)}°C</strong></p>
+
+  <div class="d-flex flex-row align-items-center">
+    <p class="mb-0 me-4">${value.weather[0].description}</p>
+    <i class="fas fa-cloud fa-3x" style="color: #eee;"></i>
+  </div>
+
+</div>
+</div>
+   </div>
+    </li>
+   
+  `;
+
+                        // document.getElementById('list' + i).innerHTML = todayData;
+                        const li = document.createElement("li");
+                        li.innerHTML = `${todayData}`;
+                        document.getElementById("ul-list").appendChild(li);
+                    })
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+
+            return false;
+        }
+
+    </script>
+</body>
+
+</html>

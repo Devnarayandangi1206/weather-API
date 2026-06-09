@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <form id="form" name="form" onsubmit="return cityName()">
+        <input type="text" placeholder="enter the city name" id="city" name="city">
+        <input type="submit" value="Submit">
+    </form>
+    <br><br>
+    <div id="weatherData">
+
+    </div>
+
+    <script>
+
+        function cityName() {
+            let city = document.forms['form']['city'].value;
+            console.log(city)
+
+            fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=dddeeb8ea156f28a1437a0af9ef33016`)
+                .then((res) => {
+                    return res.json();
+                })
+                .then((data) => {
+                    console.log(parseInt(data.list[2].main.temp - 273.15));
+                    console.log(data)
+                    let image = "https://openweathermap.org/img/wn/" + `${data.list[2].weather[0].icon}` + ".png";
+                    let todayData = `
+<div style="border: 1px solid black; text-align:center;" >
+                  <div class="card shadow-0 border">
+          <div class="card-body p-4">
+
+            <h4 class="mb-1 sfw-normal">City Name: ${city}</h4>
+            <h5 class="mb-1 sfw-normal">Date: ${data.list[1].dt_txt}</h5>
+            <img src=${image} alt='icon'>
+            <p class="mb-2">Current temperature: <strong>${parseInt(data.list[2].main.temp - 273.15)}°C</strong></p>
+            <p>Wind: <strong>${parseInt(data.list[2].wind.speed * 3.6)} Km/h</strong></p>
+            <p>Max: <strong>${parseInt(data.list[2].main.temp_max - 273.15)}°C</strong>, Min: <strong>${parseInt(data.list[2].main.temp_min - 273.15)}°C</strong></p>
+
+            <div class="d-flex flex-row align-items-center">
+              <p class="mb-0 me-4">${data.list[2].weather[0].description}</p>
+              <i class="fas fa-cloud fa-3x" style="color: #eee;"></i>
+            </div>
+
+          </div>
+        </div>
+             </div   
+            `
+                    document.getElementById('weatherData').innerHTML = todayData;
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+
+            return false;
+        }
+
+    </script>
+</body>
+
+</html>
