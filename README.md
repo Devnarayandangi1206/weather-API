@@ -58,7 +58,7 @@ Add a screenshot of your application here.
 
 👨‍💻 Author
 
-Dev Narayan Dangi
+Devnarayan Dangi
 
 GitHub: https://github.com/Devnarayandangi1206
 
